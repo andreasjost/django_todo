@@ -82,29 +82,23 @@ WSGI_APPLICATION = 'django_todo.wsgi.application'
 #    }
 # }
 
-DATABASE = {'default': dj_database_url.parse("postgres://xjzlfuspcqgzgu:9ca0c32ac7bd30aec1dd06257c2a237099f1b2d63b09479811dd5bf78ae6684e@ec2-54-75-229-28.eu-west-1.compute.amazonaws.com:5432/d6dadbudvif492")}
+# DATABASE = {'default': dj_database_url.parse("postgres://xjzlfuspcqgzgu:9ca0c32ac7bd30aec1dd06257c2a237099f1b2d63b09479811dd5bf78ae6684e@ec2-54-75-229-28.eu-west-1.compute.amazonaws.com:5432/d6dadbudvif492")}
 
-"""
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2', 
-        'NAME': 'postgresql-reticulated-94824',
+if os.path.exists("env.py"):
+    import env
 
-        'HOST': dj_database_url.parse("postgres://xjzlfuspcqgzgu:9ca0c32ac7bd30aec1dd06257c2a237099f1b2d63b09479811dd5bf78ae6684e@ec2-54-75-229-28.eu-west-1.compute.amazonaws.com:5432/d6dadbudvif492")}
-}
-"""
-"""
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'dj_database_url.parse("postgres://xjzlfuspcqgzgu:9ca0c32ac7bd30aec1dd06257c2a237099f1b2d63b09479811dd5bf78ae6684e@ec2-54-75-229-28.eu-west-1.compute.amazonaws.com:5432/d6dadbudvif492")',                      # Or path to database file if using sqlite3.
-        'USER': '',                      # Not used with sqlite3.
-        'PASSWORD': '',                  # Not used with sqlite3.
-        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+if "DATABASE_URL" in os.environ:
+    DATABASES = {
+        "default": dj_database_url.parse(os.getenv("DATABASE_URL"))
     }
-}
-"""
+else:
+    print("Postgres URL not found, using sqlite3 instead")
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+        }
+    }
 
 
 # Password validation
